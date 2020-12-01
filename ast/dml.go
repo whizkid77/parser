@@ -16,10 +16,10 @@ package ast
 import (
 	"github.com/pingcap/errors"
 
-	"github.com/pingcap/parser/auth"
-	"github.com/pingcap/parser/format"
-	"github.com/pingcap/parser/model"
-	"github.com/pingcap/parser/mysql"
+	"github.com/whizkid77/parser/auth"
+	"github.com/whizkid77/parser/format"
+	"github.com/whizkid77/parser/model"
+	"github.com/whizkid77/parser/mysql"
 )
 
 var (
@@ -411,6 +411,9 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 	case *SelectStmt, *SetOprStmt:
 		needParen = true
 	}
+
+	// Temp
+	needParen = false
 
 	if tn, tnCase := n.Source.(*TableName); tnCase {
 		if needParen {
