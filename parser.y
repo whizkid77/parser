@@ -3,7 +3,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSES/QL-LICENSE file.
 
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,13 +28,13 @@ package parser
 import (
 	"strings"
 
-	"github.com/pingcap/parser/mysql"
-	"github.com/pingcap/parser/ast"
-	"github.com/pingcap/parser/model"
-	"github.com/pingcap/parser/opcode"
-	"github.com/pingcap/parser/auth"
-	"github.com/pingcap/parser/charset"
-	"github.com/pingcap/parser/types"
+	"github.com/whizkid77/parser/mysql"
+	"github.com/whizkid77/parser/ast"
+	"github.com/whizkid77/parser/model"
+	"github.com/whizkid77/parser/opcode"
+	"github.com/whizkid77/parser/auth"
+	"github.com/whizkid77/parser/charset"
+	"github.com/whizkid77/parser/types"
 )
 
 %}

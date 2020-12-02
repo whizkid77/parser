@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -968,5 +968,5 @@ const (
 	ErrWarnOptimizerHintInvalidInteger  = 8065
 
 	// Stop adding error code here!
-	// They are moved to github.com/pingcap/tidb/errno
+	// They are moved to github.com/whizkid77/tidb/errno
 )

@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/pingcap/errors"
-	"github.com/pingcap/parser/format"
-	"github.com/pingcap/parser/model"
-	"github.com/pingcap/parser/opcode"
+	"github.com/whizkid77/errors"
+	"github.com/whizkid77/parser/format"
+	"github.com/whizkid77/parser/model"
+	"github.com/whizkid77/parser/opcode"
 )
 
 var (

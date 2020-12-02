@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/pingcap/check"
-	"github.com/pingcap/parser/mysql"
-	"github.com/pingcap/parser/types"
+	. "github.com/whizkid77/check"
+	"github.com/whizkid77/parser/mysql"
+	"github.com/whizkid77/parser/types"
 )
 
 func TestT(t *testing.T) {

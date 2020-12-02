@@ -1,4 +1,4 @@
-// Copyright 2020 PingCAP, Inc.
+// Copyright 2020 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 package parser_test
 
 import (
-	. "github.com/pingcap/check"
+	. "github.com/whizkid77/check"
 
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
-	"github.com/pingcap/parser/model"
-	"github.com/pingcap/parser/mysql"
+	"github.com/whizkid77/parser"
+	"github.com/whizkid77/parser/ast"
+	"github.com/whizkid77/parser/model"
+	"github.com/whizkid77/parser/mysql"
 )
 
 var _ = Suite(&testHintParserSuite{})

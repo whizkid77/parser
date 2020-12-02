@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/pingcap/check"
+	. "github.com/whizkid77/check"
 )
 
 func TestT(t *testing.T) {

@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ package mysql
 import (
 	"fmt"
 
-	"github.com/pingcap/errors"
+	"github.com/whizkid77/errors"
 )
 
 // Portable analogs of some common call errors.

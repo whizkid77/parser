@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 package ast
 
 import (
-	"github.com/pingcap/parser/types"
+	"github.com/whizkid77/parser/types"
 )
 
 // node is the struct implements node interface except for Accept method.

@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,17 +20,17 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/pingcap/check"
-	"github.com/pingcap/errors"
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
-	"github.com/pingcap/parser/charset"
-	. "github.com/pingcap/parser/format"
-	"github.com/pingcap/parser/model"
-	"github.com/pingcap/parser/mysql"
-	"github.com/pingcap/parser/opcode"
-	"github.com/pingcap/parser/terror"
-	"github.com/pingcap/parser/test_driver"
+	. "github.com/whizkid77/check"
+	"github.com/whizkid77/errors"
+	"github.com/whizkid77/parser"
+	"github.com/whizkid77/parser/ast"
+	"github.com/whizkid77/parser/charset"
+	. "github.com/whizkid77/parser/format"
+	"github.com/whizkid77/parser/model"
+	"github.com/whizkid77/parser/mysql"
+	"github.com/whizkid77/parser/opcode"
+	"github.com/whizkid77/parser/terror"
+	"github.com/whizkid77/parser/test_driver"
 )
 
 func TestT(t *testing.T) {
@@ -129,7 +129,7 @@ func (s *testParserSuite) TestSimple(c *C) {
 
 	// Testcase for /*! xx */
 	// See http://dev.mysql.com/doc/refman/5.7/en/comments.html
-	// Fix: https://github.com/pingcap/tidb/issues/971
+	// Fix: https://github.com/whizkid77/tidb/issues/971
 	src = "/*!40101 SET character_set_client = utf8 */;"
 	stmts, _, err = parser.Parse(src, "", "")
 	c.Assert(err, IsNil)
@@ -796,14 +796,14 @@ func (s *testParserSuite) TestDMLStmt(c *C) {
 		{"select 1 as a from dual where 1 < any (select 2) order by a", true, "SELECT 1 AS `a` FROM DUAL WHERE 1<ANY (SELECT 2) ORDER BY `a`"},
 		{"select 1 order by 1", true, "SELECT 1 ORDER BY 1"},
 
-		// for https://github.com/pingcap/tidb/issues/320
+		// for https://github.com/whizkid77/tidb/issues/320
 		{`(select 1);`, true, "(SELECT 1)"},
 
-		// for https://github.com/pingcap/parser/issues/963
+		// for https://github.com/whizkid77/parser/issues/963
 		{"select min(b) b from (select min(t.b) b from t where t.a = '');", true, "SELECT MIN(`b`) AS `b` FROM (SELECT MIN(`t`.`b`) AS `b` FROM (`t`) WHERE `t`.`a`=_UTF8MB4'')"},
 		{"select min(b) b from (select min(t.b) b from t where t.a = '') as t1;", true, "SELECT MIN(`b`) AS `b` FROM (SELECT MIN(`t`.`b`) AS `b` FROM (`t`) WHERE `t`.`a`=_UTF8MB4'') AS `t1`"},
 
-		// for https://github.com/pingcap/tidb/issues/1050
+		// for https://github.com/whizkid77/tidb/issues/1050
 		{`SELECT /*!40001 SQL_NO_CACHE */ * FROM test WHERE 1 limit 0, 2000;`, true, "SELECT SQL_NO_CACHE * FROM `test` WHERE 1 LIMIT 0,2000"},
 
 		{`ANALYZE TABLE t`, true, "ANALYZE TABLE `t`"},
@@ -2330,7 +2330,7 @@ func (s *testParserSuite) TestDDL(c *C) {
 		union_name varbinary(52) NOT NULL,
 		union_id int(11) DEFAULT '0',
 		PRIMARY KEY (union_name)) ENGINE=MyISAM DEFAULT CHARSET=binary;`, true, "CREATE TABLE `t1` (`accout_id` INT(11) DEFAULT _UTF8MB4'0',`summoner_id` INT(11) DEFAULT _UTF8MB4'0',`union_name` VARBINARY(52) NOT NULL,`union_id` INT(11) DEFAULT _UTF8MB4'0',PRIMARY KEY(`union_name`)) ENGINE = MyISAM DEFAULT CHARACTER SET = BINARY"},
-		// for issue pingcap/parser#310
+		// for issue whizkid77/parser#310
 		{`CREATE TABLE t (a DECIMAL(20,0), b DECIMAL(30), c FLOAT(25,0))`, true, "CREATE TABLE `t` (`a` DECIMAL(20,0),`b` DECIMAL(30),`c` FLOAT(25,0))"},
 		// Create table with multiple index options.
 		{`create table t (c int, index ci (c) USING BTREE COMMENT "123");`, true, "CREATE TABLE `t` (`c` INT,INDEX `ci`(`c`) USING BTREE COMMENT '123')"},
@@ -5193,7 +5193,7 @@ func (wfc *windowFrameBoundChecker) Leave(inNode ast.Node) (node ast.Node, ok bo
 }
 
 // For issue #51
-// See https://github.com/pingcap/parser/pull/51 for details
+// See https://github.com/whizkid77/parser/pull/51 for details
 func (s *testParserSuite) TestVisitFrameBound(c *C) {
 	parser := parser.New()
 	parser.EnableWindowFunc(true)
@@ -5238,7 +5238,7 @@ func (s *testParserSuite) TestFieldText(c *C) {
 	}
 }
 
-// See https://github.com/pingcap/parser/issue/94
+// See https://github.com/whizkid77/parser/issue/94
 func (s *testParserSuite) TestQuotedSystemVariables(c *C) {
 	parser := parser.New()
 
@@ -5299,7 +5299,7 @@ func (s *testParserSuite) TestQuotedSystemVariables(c *C) {
 	}
 }
 
-// See https://github.com/pingcap/parser/issue/95
+// See https://github.com/whizkid77/parser/issue/95
 func (s *testParserSuite) TestQuotedVariableColumnName(c *C) {
 	parser := parser.New()
 

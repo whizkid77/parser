@@ -1,4 +1,4 @@
-// Copyright 2017 PingCAP, Inc.
+// Copyright 2017 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ package mysql
 import (
 	"testing"
 
-	. "github.com/pingcap/check"
+	. "github.com/whizkid77/check"
 )
 
 var _ = Suite(&testConstSuite{})

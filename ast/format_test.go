@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"fmt"
 
-	. "github.com/pingcap/check"
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
+	. "github.com/whizkid77/check"
+	"github.com/whizkid77/parser"
+	"github.com/whizkid77/parser/ast"
 )
 
 var _ = Suite(&testAstFormatSuite{})

@@ -1,4 +1,4 @@
-// Copyright 2019 PingCAP, Inc.
+// Copyright 2019 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@ import (
 	"fmt"
 	"testing"
 
-	. "github.com/pingcap/check"
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
-	"github.com/pingcap/parser/charset"
-	"github.com/pingcap/parser/mysql"
-	. "github.com/pingcap/parser/types"
+	. "github.com/whizkid77/check"
+	"github.com/whizkid77/parser"
+	"github.com/whizkid77/parser/ast"
+	"github.com/whizkid77/parser/charset"
+	"github.com/whizkid77/parser/mysql"
+	. "github.com/whizkid77/parser/types"
 
 	// import parser_driver
-	_ "github.com/pingcap/parser/test_driver"
+	_ "github.com/whizkid77/parser/test_driver"
 )
 
 func TestT(t *testing.T) {

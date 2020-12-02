@@ -1,4 +1,4 @@
-// Copyright 2020 PingCAP, Inc.
+// Copyright 2020 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import (
 
 	// needed to connect to MySQL
 	_ "github.com/go-sql-driver/mysql"
-	. "github.com/pingcap/check"
+	. "github.com/whizkid77/check"
 
-	"github.com/pingcap/parser/ast"
+	"github.com/whizkid77/parser/ast"
 )
 
 func (s *testConsistentSuite) TestCompareReservedWordsWithMySQL(c *C) {

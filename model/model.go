@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pingcap/errors"
-	"github.com/pingcap/parser/auth"
-	"github.com/pingcap/parser/mysql"
-	"github.com/pingcap/parser/types"
+	"github.com/whizkid77/errors"
+	"github.com/whizkid77/parser/auth"
+	"github.com/whizkid77/parser/mysql"
+	"github.com/whizkid77/parser/types"
 )
 
 // SchemaState is the state for schema elements.
@@ -755,7 +755,7 @@ type PartitionInfo struct {
 func (pi *PartitionInfo) GetNameByID(id int64) string {
 	definitions := pi.Definitions
 	// do not convert this loop to `for _, def := range definitions`.
-	// see https://github.com/pingcap/parser/pull/1072 for the benchmark.
+	// see https://github.com/whizkid77/parser/pull/1072 for the benchmark.
 	for i := range definitions {
 		if id == definitions[i].ID {
 			return definitions[i].Name.L
@@ -975,7 +975,7 @@ func NewCIStr(s string) (cs CIStr) {
 
 // UnmarshalJSON implements the user defined unmarshal method.
 // CIStr can be unmarshaled from a single string, so PartitionDefinition.Name
-// in this change https://github.com/pingcap/tidb/pull/6460/files would be
+// in this change https://github.com/whizkid77/tidb/pull/6460/files would be
 // compatible during TiDB upgrading.
 func (cis *CIStr) UnmarshalJSON(b []byte) error {
 	type T CIStr

@@ -1,4 +1,4 @@
-// Copyright 2017 PingCAP, Inc.
+// Copyright 2017 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 package ast_test
 
 import (
-	. "github.com/pingcap/check"
-	. "github.com/pingcap/parser/ast"
+	. "github.com/whizkid77/check"
+	. "github.com/whizkid77/parser/ast"
 )
 
 var _ = Suite(&testDMLSuite{})

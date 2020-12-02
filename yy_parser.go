@@ -1,4 +1,4 @@
-// Copyright 2015 PingCAP, Inc.
+// Copyright 2015 whizkid77, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import (
 	"strconv"
 	"unicode"
 
-	"github.com/pingcap/errors"
-	"github.com/pingcap/parser/ast"
-	"github.com/pingcap/parser/mysql"
-	"github.com/pingcap/parser/terror"
+	"github.com/whizkid77/errors"
+	"github.com/whizkid77/parser/ast"
+	"github.com/whizkid77/parser/mysql"
+	"github.com/whizkid77/parser/terror"
 )
 
 var (
@@ -107,7 +107,7 @@ func New() *Parser {
 		ast.NewParamMarkerExpr == nil ||
 		ast.NewHexLiteral == nil ||
 		ast.NewBitLiteral == nil {
-		panic("no parser driver (forgotten import?) https://github.com/pingcap/parser/issues/43")
+		panic("no parser driver (forgotten import?) https://github.com/whizkid77/parser/issues/43")
 	}
 
 	p := &Parser{
