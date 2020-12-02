@@ -14,6 +14,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/whizkid77/errors"
 
 	"github.com/whizkid77/parser/auth"
@@ -411,6 +413,8 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 	case *SelectStmt, *SetOprStmt:
 		needParen = true
 	}
+
+	fmt.Println("RESTORE", needParen)
 
 	// Temp
 	needParen = false
