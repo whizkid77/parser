@@ -421,7 +421,7 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 
 	if tn, tnCase := n.Source.(*TableName); tnCase {
 		if needParen {
-			ctx.WritePlain("(")
+			ctx.WritePlain("(((")
 		}
 
 		tn.restoreName(ctx)
@@ -442,17 +442,17 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 		}
 
 		if needParen {
-			ctx.WritePlain(")")
+			ctx.WritePlain(")))")
 		}
 	} else {
 		if needParen {
-			ctx.WritePlain("(")
+			ctx.WritePlain("(((")
 		}
 		if err := n.Source.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore TableSource.Source")
 		}
 		if needParen {
-			ctx.WritePlain(")")
+			ctx.WritePlain(")))")
 		}
 		if asName := n.AsName.String(); asName != "" {
 			ctx.WriteKeyWord(" AS ")
