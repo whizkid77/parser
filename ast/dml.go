@@ -14,8 +14,6 @@
 package ast
 
 import (
-	"fmt"
-
 	"github.com/whizkid77/errors"
 
 	"github.com/whizkid77/parser/auth"
@@ -91,6 +89,16 @@ type Join struct {
 
 // Restore implements Node interface.
 func (n *Join) Restore(ctx *format.RestoreCtx) error {
+
+	// If this join only has one child, then no need to add the parentheses, which breaks Redshift.
+	// Just Restore the left child and return.
+	if n.Right == nil {
+		if err := n.Left.Restore(ctx); err != nil {
+			return errors.Annotate(err, "An error occurred while restore Join.Left")
+		}
+		return nil
+	}
+
 	if ctx.JoinLevel != 0 {
 		ctx.WritePlain("(")
 		defer ctx.WritePlain(")")
@@ -414,14 +422,9 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 		needParen = true
 	}
 
-	fmt.Println("RESTORE", needParen)
-
-	// Temp
-	needParen = false
-
 	if tn, tnCase := n.Source.(*TableName); tnCase {
 		if needParen {
-			ctx.WritePlain("(((")
+			ctx.WritePlain("(")
 		}
 
 		tn.restoreName(ctx)
@@ -442,17 +445,17 @@ func (n *TableSource) Restore(ctx *format.RestoreCtx) error {
 		}
 
 		if needParen {
-			ctx.WritePlain(")))")
+			ctx.WritePlain(")")
 		}
 	} else {
 		if needParen {
-			ctx.WritePlain("(((")
+			ctx.WritePlain("(")
 		}
 		if err := n.Source.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore TableSource.Source")
 		}
 		if needParen {
-			ctx.WritePlain(")))")
+			ctx.WritePlain(")")
 		}
 		if asName := n.AsName.String(); asName != "" {
 			ctx.WriteKeyWord(" AS ")

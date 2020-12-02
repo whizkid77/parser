@@ -323,18 +323,25 @@ func (ctx *RestoreCtx) WriteString(str string) {
 // WriteName writes the name into writer
 // `name` maybe wrapped in quotes and escaped according to RestoreFlags.
 func (ctx *RestoreCtx) WriteName(name string) {
+	var flags = ctx.Flags
+
+	// If the name has uppercase characters or spaces, we must double quote it (for Redshift at least).
+	if strings.ToLower(name) != name || strings.Contains(name, " ") {
+		flags = flags | RestoreNameDoubleQuotes
+	}
+
 	switch {
-	case ctx.Flags.HasNameUppercaseFlag():
+	case flags.HasNameUppercaseFlag():
 		name = strings.ToUpper(name)
-	case ctx.Flags.HasNameLowercaseFlag():
+	case flags.HasNameLowercaseFlag():
 		name = strings.ToLower(name)
 	}
 	quotes := ""
 	switch {
-	case ctx.Flags.HasNameDoubleQuotesFlag():
+	case flags.HasNameDoubleQuotesFlag():
 		name = strings.Replace(name, `"`, `""`, -1)
 		quotes = `"`
-	case ctx.Flags.HasNameBackQuotesFlag():
+	case flags.HasNameBackQuotesFlag():
 		name = strings.Replace(name, "`", "``", -1)
 		quotes = "`"
 	}
