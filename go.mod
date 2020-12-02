@@ -8,8 +8,8 @@ require (
 	github.com/cznic/strutil v0.0.0-20171016134553-529a34b1c186
 	github.com/cznic/y v0.0.0-20170802143616-045f81c6662a
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/whizkid77/check v0.0.0-20190102082844-67f458068fc8
-	github.com/whizkid77/errors v0.11.5-0.20201029093017-5a7df2af2ac7
+	github.com/whizkid77/check v1.1.2
+	github.com/whizkid77/errors v1.1.2
 	github.com/whizkid77/log v0.0.0-20200511115504-543df19646ad
 	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
