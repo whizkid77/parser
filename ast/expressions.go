@@ -299,6 +299,11 @@ func (n *CaseExpr) Restore(ctx *format.RestoreCtx) error {
 			return errors.Annotate(err, "An error occurred while restore CaseExpr.Value")
 		}
 	}
+
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.PrettyPrintIndentLevel++
+	}
+
 	for _, clause := range n.WhenClauses {
 		ctx.WritePrettyNewlineOrSpace()
 		if err := clause.Restore(ctx); err != nil {
