@@ -218,6 +218,8 @@ const (
 	RestoreNameBackQuotes
 
 	RestoreSpacesAroundBinaryOperation
+
+	RestorePrettyPrint
 )
 
 const (
@@ -278,16 +280,23 @@ func (rf RestoreFlags) HasSpacesAroundBinaryOperationFlag() bool {
 	return rf.has(RestoreSpacesAroundBinaryOperation)
 }
 
+// HasPrettyPrintFlag returns a boolean indicating whether `rf` has `HasPrettyPrintFlag` flag.
+func (rf RestoreFlags) HasPrettyPrintFlag() bool {
+	return rf.has(RestorePrettyPrint)
+}
+
 // RestoreCtx is `Restore` context to hold flags and writer.
 type RestoreCtx struct {
-	Flags     RestoreFlags
-	In        io.Writer
-	JoinLevel int
+	Flags                  RestoreFlags
+	In                     io.Writer
+	JoinLevel              int
+	PrettyPrintIndentLevel int
+	PrettyPrintToken       string
 }
 
 // NewRestoreCtx returns a new `RestoreCtx`.
 func NewRestoreCtx(flags RestoreFlags, in io.Writer) *RestoreCtx {
-	return &RestoreCtx{flags, in, 0}
+	return &RestoreCtx{flags, in, 0, 0, "  "}
 }
 
 // WriteKeyWord writes the `keyWord` into writer.
@@ -356,4 +365,24 @@ func (ctx *RestoreCtx) WritePlain(plainText string) {
 // WritePlainf write the plain text into writer without any handling.
 func (ctx *RestoreCtx) WritePlainf(format string, a ...interface{}) {
 	fmt.Fprintf(ctx.In, format, a...)
+}
+
+// Pretty printing functions
+func (ctx *RestoreCtx) WriteIndent() {
+	ctx.WritePlain(strings.Repeat(ctx.PrettyPrintToken, ctx.PrettyPrintIndentLevel))
+}
+func (ctx *RestoreCtx) WriteNewline() {
+	ctx.WritePlain("\n")
+}
+func (ctx *RestoreCtx) WritePrettyNewline() {
+	ctx.WriteNewline()
+	ctx.WriteIndent()
+}
+func (ctx *RestoreCtx) WritePrettyNewlineOrSpace() {
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.WriteNewline()
+		ctx.WriteIndent()
+	} else {
+		ctx.WritePlain(" ")
+	}
 }

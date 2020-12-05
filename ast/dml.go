@@ -111,19 +111,22 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 	if n.Right == nil {
 		return nil
 	}
+
+	ctx.WritePrettyNewlineOrSpace()
+
 	if n.NaturalJoin {
-		ctx.WriteKeyWord(" NATURAL")
+		ctx.WriteKeyWord("NATURAL")
 	}
 	switch n.Tp {
 	case LeftJoin:
-		ctx.WriteKeyWord(" LEFT")
+		ctx.WriteKeyWord("LEFT")
 	case RightJoin:
-		ctx.WriteKeyWord(" RIGHT")
+		ctx.WriteKeyWord("RIGHT")
 	}
 	if n.StraightJoin {
-		ctx.WriteKeyWord(" STRAIGHT_JOIN ")
+		ctx.WriteKeyWord("STRAIGHT_JOIN ")
 	} else {
-		ctx.WriteKeyWord(" JOIN ")
+		ctx.WriteKeyWord("JOIN ")
 	}
 	ctx.JoinLevel++
 	if err := n.Right.Restore(ctx); err != nil {
@@ -131,8 +134,22 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 	}
 	ctx.JoinLevel--
 
+	// Indent for ON and USING clauses below
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.PrettyPrintIndentLevel++
+		defer func() {
+			ctx.PrettyPrintIndentLevel--
+		}()
+	}
+
 	if n.On != nil {
-		ctx.WritePlain(" ")
+
+		if ctx.Flags.HasPrettyPrintFlag() {
+			ctx.WritePrettyNewline()
+		} else {
+			ctx.WritePlain(" ")
+		}
+
 		if err := n.On.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore Join.On")
 		}
@@ -569,6 +586,15 @@ type SelectField struct {
 
 // Restore implements Node interface.
 func (n *SelectField) Restore(ctx *format.RestoreCtx) error {
+
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.PrettyPrintIndentLevel++
+		defer func() {
+			ctx.PrettyPrintIndentLevel--
+		}()
+		ctx.WritePrettyNewline()
+	}
+
 	if n.WildCard != nil {
 		if err := n.WildCard.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore SelectField.WildCard")
@@ -962,9 +988,22 @@ func (n *SelectStmt) Restore(ctx *format.RestoreCtx) error {
 	if n.IsInBraces {
 		ctx.WritePlain("(")
 		defer func() {
+			// ADDTHIS
+			if ctx.Flags.HasPrettyPrintFlag() {
+				ctx.WritePrettyNewline()
+			}
 			ctx.WritePlain(")")
 		}()
 	}
+
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.PrettyPrintIndentLevel++
+		defer func() {
+			ctx.PrettyPrintIndentLevel--
+		}()
+		ctx.WritePrettyNewline()
+	}
+
 	ctx.WriteKeyWord(n.Kind.String())
 	ctx.WritePlain(" ")
 	switch n.Kind {
@@ -1018,7 +1057,9 @@ func (n *SelectStmt) Restore(ctx *format.RestoreCtx) error {
 		}
 
 		if n.From != nil {
-			ctx.WriteKeyWord(" FROM ")
+			ctx.WritePrettyNewlineOrSpace()
+
+			ctx.WriteKeyWord("FROM ")
 			if err := n.From.Restore(ctx); err != nil {
 				return errors.Annotate(err, "An error occurred while restore SelectStmt.From")
 			}
@@ -1029,21 +1070,24 @@ func (n *SelectStmt) Restore(ctx *format.RestoreCtx) error {
 		}
 
 		if n.Where != nil {
-			ctx.WriteKeyWord(" WHERE ")
+
+			ctx.WritePrettyNewlineOrSpace()
+
+			ctx.WriteKeyWord("WHERE ")
 			if err := n.Where.Restore(ctx); err != nil {
 				return errors.Annotate(err, "An error occurred while restore SelectStmt.Where")
 			}
 		}
 
 		if n.GroupBy != nil {
-			ctx.WritePlain(" ")
+			ctx.WritePrettyNewlineOrSpace()
 			if err := n.GroupBy.Restore(ctx); err != nil {
 				return errors.Annotate(err, "An error occurred while restore SelectStmt.GroupBy")
 			}
 		}
 
 		if n.Having != nil {
-			ctx.WritePlain(" ")
+			ctx.WritePrettyNewlineOrSpace()
 			if err := n.Having.Restore(ctx); err != nil {
 				return errors.Annotate(err, "An error occurred while restore SelectStmt.Having")
 			}
@@ -1076,14 +1120,14 @@ func (n *SelectStmt) Restore(ctx *format.RestoreCtx) error {
 	}
 
 	if n.OrderBy != nil {
-		ctx.WritePlain(" ")
+		ctx.WritePrettyNewlineOrSpace()
 		if err := n.OrderBy.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore SelectStmt.OrderBy")
 		}
 	}
 
 	if n.Limit != nil {
-		ctx.WritePlain(" ")
+		ctx.WritePrettyNewlineOrSpace()
 		if err := n.Limit.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore SelectStmt.Limit")
 		}

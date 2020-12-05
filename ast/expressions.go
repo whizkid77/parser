@@ -176,6 +176,23 @@ func (n *BinaryOperationExpr) Restore(ctx *format.RestoreCtx) error {
 	if err := n.L.Restore(ctx); err != nil {
 		return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.L")
 	}
+
+	// Start AND and OR clauses on a new line
+	if ctx.Flags.HasPrettyPrintFlag() {
+		if n.Op == opcode.LogicAnd || n.Op == opcode.LogicOr {
+			ctx.PrettyPrintIndentLevel++
+			defer func() {
+				ctx.PrettyPrintIndentLevel--
+			}()
+			ctx.WritePrettyNewline()
+			if err := n.Op.Restore(ctx); err != nil {
+				return err // no need to annotate, the caller will annotate.
+			}
+			ctx.WritePlain(" ")
+			return nil
+		}
+	}
+
 	if err := restoreBinaryOpWithSpacesAround(ctx, n.Op); err != nil {
 		return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.Op")
 	}
@@ -283,18 +300,23 @@ func (n *CaseExpr) Restore(ctx *format.RestoreCtx) error {
 		}
 	}
 	for _, clause := range n.WhenClauses {
-		ctx.WritePlain(" ")
+		ctx.WritePrettyNewlineOrSpace()
 		if err := clause.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore CaseExpr.WhenClauses")
 		}
 	}
 	if n.ElseClause != nil {
-		ctx.WriteKeyWord(" ELSE ")
+		ctx.WritePrettyNewlineOrSpace()
+		ctx.WriteKeyWord("ELSE ")
 		if err := n.ElseClause.Restore(ctx); err != nil {
 			return errors.Annotate(err, "An error occurred while restore CaseExpr.ElseClause")
 		}
 	}
-	ctx.WriteKeyWord(" END")
+	if ctx.Flags.HasPrettyPrintFlag() {
+		ctx.PrettyPrintIndentLevel--
+	}
+	ctx.WritePrettyNewlineOrSpace()
+	ctx.WriteKeyWord("END")
 
 	return nil
 }
