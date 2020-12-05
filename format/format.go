@@ -21,6 +21,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math"
 	"strings"
 )
 
@@ -369,7 +370,7 @@ func (ctx *RestoreCtx) WritePlainf(format string, a ...interface{}) {
 
 // Pretty printing functions
 func (ctx *RestoreCtx) WriteIndent() {
-	ctx.WritePlain(strings.Repeat(ctx.PrettyPrintToken, ctx.PrettyPrintIndentLevel))
+	ctx.WritePlain(strings.Repeat(ctx.PrettyPrintToken, int(math.Max(0, float64(ctx.PrettyPrintIndentLevel-1)))))
 }
 func (ctx *RestoreCtx) WriteNewline() {
 	ctx.WritePlain("\n")
