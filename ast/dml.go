@@ -115,13 +115,13 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 	ctx.WritePrettyNewlineOrSpace()
 
 	if n.NaturalJoin {
-		ctx.WriteKeyWord("NATURAL")
+		ctx.WriteKeyWord("NATURAL ")
 	}
 	switch n.Tp {
 	case LeftJoin:
-		ctx.WriteKeyWord("LEFT")
+		ctx.WriteKeyWord("LEFT ")
 	case RightJoin:
-		ctx.WriteKeyWord("RIGHT")
+		ctx.WriteKeyWord("RIGHT ")
 	}
 	if n.StraightJoin {
 		ctx.WriteKeyWord("STRAIGHT_JOIN ")

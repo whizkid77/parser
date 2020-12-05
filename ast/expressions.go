@@ -171,6 +171,17 @@ func restoreBinaryOpWithSpacesAround(ctx *format.RestoreCtx, op opcode.Op) error
 	return nil
 }
 
+func restoreBinaryOpWithTrailingSpace(ctx *format.RestoreCtx, op opcode.Op) error {
+	shouldInsertSpace := ctx.Flags.HasSpacesAroundBinaryOperationFlag() || op.IsKeyword()
+	if err := op.Restore(ctx); err != nil {
+		return err // no need to annotate, the caller will annotate.
+	}
+	if shouldInsertSpace {
+		ctx.WritePlain(" ")
+	}
+	return nil
+}
+
 // Restore implements Node interface.
 func (n *BinaryOperationExpr) Restore(ctx *format.RestoreCtx) error {
 	if err := n.L.Restore(ctx); err != nil {
@@ -178,24 +189,26 @@ func (n *BinaryOperationExpr) Restore(ctx *format.RestoreCtx) error {
 	}
 
 	// Start AND and OR clauses on a new line
-	if ctx.Flags.HasPrettyPrintFlag() {
-		if n.Op == opcode.LogicAnd || n.Op == opcode.LogicOr {
-			ctx.PrettyPrintIndentLevel++
-			defer func() {
-				ctx.PrettyPrintIndentLevel--
-			}()
-			ctx.WritePrettyNewline()
-			if err := n.Op.Restore(ctx); err != nil {
-				return err // no need to annotate, the caller will annotate.
-			}
-			ctx.WritePlain(" ")
-			return nil
+	var shouldStartNewline = false
+	if ctx.Flags.HasPrettyPrintFlag() && (n.Op == opcode.LogicAnd || n.Op == opcode.LogicOr) {
+		shouldStartNewline = true
+		ctx.PrettyPrintIndentLevel++
+		defer func() {
+			ctx.PrettyPrintIndentLevel--
+		}()
+		ctx.WritePrettyNewline()
+	}
+
+	if shouldStartNewline {
+		if err := restoreBinaryOpWithTrailingSpace(ctx, n.Op); err != nil {
+			return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.Op")
+		}
+	} else {
+		if err := restoreBinaryOpWithSpacesAround(ctx, n.Op); err != nil {
+			return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.Op")
 		}
 	}
 
-	if err := restoreBinaryOpWithSpacesAround(ctx, n.Op); err != nil {
-		return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.Op")
-	}
 	if err := n.R.Restore(ctx); err != nil {
 		return errors.Annotate(err, "An error occurred when restore BinaryOperationExpr.R")
 	}
