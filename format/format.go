@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"regexp"
 	"strings"
 )
 
@@ -335,8 +336,8 @@ func (ctx *RestoreCtx) WriteString(str string) {
 func (ctx *RestoreCtx) WriteName(name string) {
 	var flags = ctx.Flags
 
-	// If the name has uppercase characters or spaces, we must double quote it (for Redshift at least).
-	if strings.ToLower(name) != name || strings.Contains(name, " ") {
+	// If the name has anything except lowercase and underscores, we must double quote it (for Redshift at least).
+	if isLowercaseAndUnderscoresOnly, _ := regexp.MatchString("^[a-z_]+$", name); !isLowercaseAndUnderscoresOnly {
 		flags = flags | RestoreNameDoubleQuotes
 	}
 
