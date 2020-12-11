@@ -99,40 +99,49 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 		return nil
 	}
 
-	if ctx.JoinLevel != 0 {
+	if ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1] != 0 {
 		ctx.WritePlain("(")
 		defer ctx.WritePlain(")")
 	}
-	ctx.JoinLevel++
+	ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1]++
 	if err := n.Left.Restore(ctx); err != nil {
 		return errors.Annotate(err, "An error occurred while restore Join.Left")
 	}
-	ctx.JoinLevel--
+	ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1]--
 	if n.Right == nil {
 		return nil
 	}
 
-	ctx.WritePrettyNewlineOrSpace()
+	if !n.StraightJoin && !n.NaturalJoin && n.Tp != LeftJoin && n.Tp != RightJoin && n.On == nil {
+		ctx.WritePlain(", ")
+		ctx.WritePrettyNewlineOrSpace()
 
-	if n.NaturalJoin {
-		ctx.WriteKeyWord("NATURAL ")
-	}
-	switch n.Tp {
-	case LeftJoin:
-		ctx.WriteKeyWord("LEFT ")
-	case RightJoin:
-		ctx.WriteKeyWord("RIGHT ")
-	}
-	if n.StraightJoin {
-		ctx.WriteKeyWord("STRAIGHT_JOIN ")
 	} else {
-		ctx.WriteKeyWord("JOIN ")
+
+		ctx.WritePrettyNewlineOrSpace()
+
+		if n.NaturalJoin {
+			ctx.WriteKeyWord("NATURAL ")
+		}
+		switch n.Tp {
+		case LeftJoin:
+			ctx.WriteKeyWord("LEFT ")
+		case RightJoin:
+			ctx.WriteKeyWord("RIGHT ")
+		}
+		if n.StraightJoin {
+			ctx.WriteKeyWord("STRAIGHT_JOIN ")
+		} else {
+			ctx.WriteKeyWord("JOIN ")
+		}
+
 	}
-	ctx.JoinLevel++
+
+	ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1]++
 	if err := n.Right.Restore(ctx); err != nil {
 		return errors.Annotate(err, "An error occurred while restore Join.Right")
 	}
-	ctx.JoinLevel--
+	ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1]--
 
 	// Indent for ON and USING clauses below
 	if ctx.Flags.HasPrettyPrintFlag() {
@@ -985,10 +994,16 @@ type SelectStmt struct {
 
 // Restore implements Node interface.
 func (n *SelectStmt) Restore(ctx *format.RestoreCtx) error {
+
+	// A new SELECT needs to create a new scope for JoinLevel starting at level 0 and push it onto the stack.
+	ctx.JoinLevelStack = append(ctx.JoinLevelStack, 0)
+	defer func() {
+		ctx.JoinLevelStack = ctx.JoinLevelStack[:len(ctx.JoinLevelStack)-1]
+	}()
+
 	if n.IsInBraces {
 		ctx.WritePlain("(")
 		defer func() {
-			// ADDTHIS
 			if ctx.Flags.HasPrettyPrintFlag() {
 				ctx.WritePrettyNewline()
 			}

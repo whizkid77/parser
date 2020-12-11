@@ -291,14 +291,14 @@ func (rf RestoreFlags) HasPrettyPrintFlag() bool {
 type RestoreCtx struct {
 	Flags                  RestoreFlags
 	In                     io.Writer
-	JoinLevel              int
+	JoinLevelStack         []int
 	PrettyPrintIndentLevel int
 	PrettyPrintToken       string
 }
 
 // NewRestoreCtx returns a new `RestoreCtx`.
 func NewRestoreCtx(flags RestoreFlags, in io.Writer) *RestoreCtx {
-	return &RestoreCtx{flags, in, 0, 0, "  "}
+	return &RestoreCtx{flags, in, []int{0}, 0, "  "}
 }
 
 // WriteKeyWord writes the `keyWord` into writer.
