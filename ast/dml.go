@@ -99,7 +99,9 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 		return nil
 	}
 
-	if ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1] != 0 {
+	var isImplicitJoin = !n.StraightJoin && !n.NaturalJoin && n.Tp != LeftJoin && n.Tp != RightJoin && n.On == nil
+
+	if ctx.JoinLevelStack[len(ctx.JoinLevelStack)-1] != 0 && !isImplicitJoin {
 		ctx.WritePlain("(")
 		defer ctx.WritePlain(")")
 	}
@@ -112,7 +114,8 @@ func (n *Join) Restore(ctx *format.RestoreCtx) error {
 		return nil
 	}
 
-	if !n.StraightJoin && !n.NaturalJoin && n.Tp != LeftJoin && n.Tp != RightJoin && n.On == nil {
+	if isImplicitJoin {
+
 		ctx.WritePlain(", ")
 		ctx.WritePrettyNewlineOrSpace()
 
